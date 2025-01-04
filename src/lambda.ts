@@ -47,3 +47,22 @@ async function login(page: Page) {
   const cookies = await page.cookies();
   return cookies.map(({name, value}) => ({name, value}));
 }
+
+async function getTotalPages(page: Page, cookies): Promise<number> {
+  await page.goto('https://hywep.hanyang.ac.kr/compjoinsearch/list.do');
+  await page.setCookie(...cookies);
+
+  await page.reload();
+
+  const totalText = await page.$eval(
+      'span[style*="font-weight: 600;"]',
+      (span) => span.textContent || '',
+  );
+  const match = totalText.match(/총\s*:\s*(\d+)\s*건/);
+
+  if (!match || !match[1]) throw new Error('Could not extract total count.');
+
+  const totalCount = parseInt(match[1], 10);
+  return Math.ceil(totalCount / 50);
+}
+
