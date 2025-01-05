@@ -1,27 +1,42 @@
-service: hywep-recruit-crawler
+service: hywep-recruit-raw
 
 plugins:
   - serverless-offline
+  - serverless-docker-artifacts
 
 custom:
-  serverless-offline:
-    useDocker: true
+  docker:
+    image: hywep-recruit-crawler-image
+    build:
+      path: .
+    push:
+      repository: ${env:AWS_ACCOUNT_ID}.dkr.ecr.${opt:region, 'ap-northeast-2'}.amazonaws.com/hywep-recruit-crawler-${opt:stage, 'dev'}
+      tag: latest
+
+  bucketNames:
+    dev: hywep-recruit-raw-dev
+    prod: hywep-recruit-raw-prod
+  queueNames:
+    dev: hywep-recruit-queue-dev
+    prod: hywep-recruit-queue-prod
+  ecrRepoNames:
+    dev: hywep-recruit-crawler-dev
+    prod: hywep-recruit-crawler-prod
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: ap-northeast-2
-  environment:
-    BUCKET_NAME: ${env:HYWE_RECRUIT_BUCKET_NAME}
-    HYWE_LOGIN_USERNAME: ${env:HYWE_LOGIN_USERNAME}
-    HYWE_LOGIN_PASSWORD: ${env:HYWE_LOGIN_PASSWORD}
-    SQS_QUEUE_URL:
-      Ref: HywepRecruitQueue
   ecr:
     images:
       hywep-recruit-crawler-image:
         path: .
-        platform: linux/amd64
+  environment:
+    BUCKET_NAME: ${self:custom.bucketNames.${opt:stage, 'dev'}}
+    HYWE_LOGIN_USERNAME: ${env:HYWE_LOGIN_USERNAME}
+    HYWE_LOGIN_PASSWORD: ${env:HYWE_LOGIN_PASSWORD}
+    SQS_QUEUE_URL:
+      Ref: HywepRecruitQueue
   iam:
     role:
       statements:
@@ -31,8 +46,8 @@ provider:
             - s3:GetObject
             - s3:PutObject
           Resource:
-            - arn:aws:s3:::hywep-recruit-raw
-            - arn:aws:s3:::hywep-recruit-raw/*
+            - arn:aws:s3:::${self:custom.bucketNames.${opt:stage, 'dev'}}
+            - arn:aws:s3:::${self:custom.bucketNames.${opt:stage, 'dev'}}/*
         - Effect: Allow
           Action:
             - sqs:SendMessage
@@ -56,7 +71,7 @@ resources:
     HywepRawBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: hywep-recruit-raw
+        BucketName: ${self:custom.bucketNames.${opt:stage, 'dev'}}
         PublicAccessBlockConfiguration:
           BlockPublicAcls: true
           BlockPublicPolicy: true
@@ -66,9 +81,15 @@ resources:
     HywepRecruitCrawlerECR:
       Type: AWS::ECR::Repository
       Properties:
-        RepositoryName: hywep-recruit-crawler
+        RepositoryName: ${self:custom.ecrRepoNames.${opt:stage, 'dev'}}
 
     HywepRecruitQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: hywep-recruit-queue
+        QueueName: ${self:custom.queueNames.${opt:stage, 'dev'}}
+
+  Outputs:
+    HywepRecruitQueueArn:
+      Value: !GetAtt HywepRecruitQueue.Arn
+      Export:
+        Name: ${self:service}-${opt:stage, 'dev'}-HywepRecruitQueueArn

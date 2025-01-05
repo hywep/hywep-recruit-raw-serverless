@@ -33,6 +33,7 @@
     "puppeteer-core": "^10.1.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "serverless-docker-artifacts": "^0.1.1",
     "serverless-offline": "^14.4.0"
   },
   "devDependencies": {
