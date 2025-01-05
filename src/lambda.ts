@@ -302,7 +302,7 @@ const crawlAndSaveData = async () => {
 
     console.log('Processing complete.');
 
-    const bucketName = process.env.BUCKET_NAME!;
+    const bucketName = process.env.HYWE_RECRUIT_BUCKET_NAME!;
     const timestamp = new Date().toISOString();
     const key = `raw-data-${timestamp}.json`;
     const body = JSON.stringify(results, null, 2);
