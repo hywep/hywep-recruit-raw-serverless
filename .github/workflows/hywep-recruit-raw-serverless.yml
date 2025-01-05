@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - qa
       - develop
 
 jobs:
@@ -31,6 +32,8 @@ jobs:
         run: |
           if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
             sls deploy --stage dev
+          elif [ "${{ github.ref }}" == "refs/heads/qa" ]; then
+            sls deploy --stage qa
           elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
             sls deploy --stage prod
           fi
