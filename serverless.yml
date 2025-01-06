@@ -35,7 +35,7 @@ provider:
       hywep-recruit-crawler-image:
         path: .
   environment:
-    BUCKET_NAME: ${self:custom.bucketNames.${opt:stage, 'dev'}}
+    HYWE_RECRUIT_BUCKET_NAME: ${self:custom.bucketNames.${opt:stage, 'dev'}}
     HYWE_LOGIN_USERNAME: ${env:HYWE_LOGIN_USERNAME}
     HYWE_LOGIN_PASSWORD: ${env:HYWE_LOGIN_PASSWORD}
     SQS_QUEUE_URL:
