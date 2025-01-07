@@ -17,14 +17,21 @@ custom:
     dev: hywep-recruit-raw-dev
     qa: hywep-recruit-raw-qa
     prod: hywep-recruit-raw-prod
+
   queueNames:
     dev: hywep-recruit-queue-dev
     qa: hywep-recruit-queue-qa
     prod: hywep-recruit-queue-prod
+
   ecrRepoNames:
     dev: hywep-recruit-crawler-dev
     qa: hywep-recruit-crawler-qa
     prod: hywep-recruit-crawler-prod
+
+  schedules:
+    dev: rate(6 hours)
+    qa: rate(6 hours)
+    prod: rate(3 hours)
 
 provider:
   name: aws
@@ -67,7 +74,7 @@ functions:
     timeout: 600
     memorySize: 1024
     events:
-      - schedule: rate(3 hours)
+      - schedule: ${self:custom.schedules.${opt:stage, 'dev'}}
 
 resources:
   Resources:
