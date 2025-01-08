@@ -97,6 +97,7 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.queueNames.${opt:stage, 'dev'}}
+        VisibilityTimeout: 600
 
   Outputs:
     HywepRecruitQueueArn:
