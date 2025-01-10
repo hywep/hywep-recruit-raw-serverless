@@ -29,9 +29,13 @@ custom:
     prod: hywep-recruit-crawler-prod
 
   schedules:
-    dev: rate(6 hours)
-    qa: rate(6 hours)
-    prod: rate(3 hours)
+    dev:
+      - cron(10 0-9/3 * * 1-5)
+    qa:
+      - cron(30 0-9/3 * * 1-5)
+    prod:
+      - cron(0 0-9 * * 1-5)
+
 
 provider:
   name: aws
@@ -74,7 +78,8 @@ functions:
     timeout: 600
     memorySize: 1024
     events:
-      - schedule: ${self:custom.schedules.${opt:stage, 'dev'}}
+      - schedule:
+          rate: ${self:custom.schedules.${opt:stage, 'dev'}}
 
 resources:
   Resources:
