@@ -29,12 +29,9 @@ custom:
     prod: hywep-recruit-crawler-prod
 
   schedules:
-    dev:
-      - cron(10 0-9/3 * * 1-5)
-    qa:
-      - cron(30 0-9/3 * * 1-5)
-    prod:
-      - cron(0 0-9 * * 1-5)
+    dev: cron(10 0-9/3 ? * 1-5 *)
+    qa: cron(30 0-9/3 ? * 1-5 *)
+    prod: cron(0 0-9 ? * 1-5 *)
 
 
 provider:
