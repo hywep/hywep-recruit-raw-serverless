@@ -30,11 +30,11 @@ custom:
 
   schedules:
     dev:
-      expression: cron(10 3,9 ? * MON-FRI)
+      - cron(10 0-9/3 ? * MON-FRI)
     qa:
-      expression: cron(30 3,9 ? * MON-FRI)
+      - cron(30 0-9/3 ? * MON-FRI)
     prod:
-      expression: cron(0 0-9 ? * MON-FRI)
+      - cron(0 0-9 ? * MON-FRI)
 
 
 provider:
@@ -79,8 +79,7 @@ functions:
     memorySize: 1024
     events:
       - schedule:
-          rate: ${self:custom.schedules.${opt:stage, 'dev'}.expression}
-
+          rate: ${self:custom.schedules.${opt:stage, 'dev'}}
 
 resources:
   Resources:
