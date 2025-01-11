@@ -16,6 +16,7 @@ COPY package.json yarn.lock ./
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN yarn install
+RUN yarn add datadog-lambda-js dd-trace
 
 COPY tsconfig.json ./
 COPY src ./src
