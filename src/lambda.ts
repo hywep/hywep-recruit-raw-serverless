@@ -6,13 +6,10 @@ import {sendMessageToSQS} from "./sqs";
 import {uploadToS3} from "./s3";
 import {fieldNames} from "./contants";
 import {delay} from './utils'
-import {datadog} from 'datadog-lambda-js';
-import tracer from 'dd-trace';
 
 const chromium = require('chrome-aws-lambda');
 
 dotenv.config();
-tracer.init();
 
 async function launchBrowser() {
   const isLambda = !!process.env.AWS_EXECUTION_ENV;
@@ -328,7 +325,7 @@ const crawlAndSaveData = async () => {
   }
 };
 
-export const rawHandler: Handler = async (
+export const handler: Handler = async (
     event: any,
     context: Context,
     callback: Callback,
@@ -336,5 +333,3 @@ export const rawHandler: Handler = async (
   console.log('Incoming Event:', JSON.stringify(event, null, 2));
   await crawlAndSaveData();
 };
-
-export const handler = datadog(rawHandler);
