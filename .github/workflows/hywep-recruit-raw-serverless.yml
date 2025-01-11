@@ -42,4 +42,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           HYWE_LOGIN_USERNAME: ${{ secrets.HYWE_LOGIN_USERNAME }}
-          HYWE_LOGIN_PASSWORD: ${{ secrets.HYWE_LOGIN_PASSWORD }}
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_SITE: ${{ secrets.DD_SITE }}
+
