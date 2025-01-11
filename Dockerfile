@@ -23,6 +23,8 @@ RUN yarn build
 
 FROM public.ecr.aws/lambda/nodejs:18
 
+COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
+
 COPY --from=builder /usr/lib64/ /usr/lib64/
 COPY --from=builder /usr/lib/ /usr/lib/
 
@@ -31,4 +33,5 @@ COPY --from=builder /var/task/dist ./dist
 COPY --from=builder /var/task/node_modules ./node_modules
 COPY package.json ./
 
-CMD ["dist/lambda.handler"]
+ENV DD_LAMBDA_HANDLER=dist/lambda.handler
+CMD ["node_modules/datadog-lambda-js/dist/handler.handler"]
