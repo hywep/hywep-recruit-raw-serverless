@@ -28,6 +28,8 @@
     "@supercharge/promise-pool": "^3.2.0",
     "aws-lambda": "^1.0.7",
     "chrome-aws-lambda": "^10.1.0",
+    "datadog-lambda-js": "^9.118.0",
+    "dd-trace": "^5.31.0",
     "dotenv": "^16.4.7",
     "p-limit": "^6.2.0",
     "puppeteer-core": "^10.1.0",
