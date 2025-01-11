@@ -46,6 +46,9 @@ provider:
     DD_ENV: ${opt:stage, 'dev'}
     DD_API_KEY: ${env:DD_API_KEY}
     DD_SITE: ${env:DD_SITE}
+    DD_TRACE_ENABLED: true
+    DD_LOGS_ENABLED: true
+
     HYWE_RECRUIT_BUCKET_NAME: ${self:custom.bucketNames.${opt:stage, 'dev'}}
     HYWE_LOGIN_USERNAME: ${env:HYWE_LOGIN_USERNAME}
     HYWE_LOGIN_PASSWORD: ${env:HYWE_LOGIN_PASSWORD}
