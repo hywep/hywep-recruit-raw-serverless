@@ -59,6 +59,12 @@ async function getTotalPages(page: Page, cookies): Promise<number> {
 
   await page.reload();
 
+  try {
+    await page.waitForSelector('span[style*="font-weight: 600;"]', { timeout: 5000 });
+  } catch (error) {
+    throw new Error('Target element not found: span[style*="font-weight: 600;"]');
+  }
+
   const totalText = await page.$eval(
       'span[style*="font-weight: 600;"]',
       (span) => span.textContent || '',
